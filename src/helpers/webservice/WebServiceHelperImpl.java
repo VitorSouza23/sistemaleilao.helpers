@@ -5,7 +5,6 @@
  */
 package helpers.webservice;
 
-
 import helpers.xmlcontroller.IXMLController;
 import helpers.xmlcontroller.XMLController;
 import java.util.ArrayList;
@@ -18,7 +17,8 @@ import produto.Produto;
  *
  * @author Vitor
  */
-public class WebServiceHelperImpl implements IWebServiceHelper{
+public class WebServiceHelperImpl implements IWebServiceHelper {
+
     private static long _idCounter = 0;
     private static WebServiceHelperImpl _INSTANCE;
     private final SistemaLeilaoPort_JerseyClient serverce;
@@ -29,15 +29,14 @@ public class WebServiceHelperImpl implements IWebServiceHelper{
         this.serverce = new SistemaLeilaoPort_JerseyClient();
         this.xmlController = new XMLController<>();
     }
-    
-    public static WebServiceHelperImpl getInstance(){
-        if(_INSTANCE == null){
+
+    public static WebServiceHelperImpl getInstance() {
+        if (_INSTANCE == null) {
             _INSTANCE = new WebServiceHelperImpl();
         }
         return _INSTANCE;
     }
-    
-    
+
     @Override
     public void addProduto(Produto produto) {
         produto.setId(_idCounter++);
@@ -51,24 +50,25 @@ public class WebServiceHelperImpl implements IWebServiceHelper{
 
     @Override
     public void upadateProduto(Produto produto) {
-         this.serverce.postUpdateProduto(this.xmlController.toXML(produto));
+        this.serverce.postUpdateProduto(this.xmlController.toXML(produto));
     }
 
     @Override
     public Produto getProdutoById(long id) {
-        return (Produto)this.serverce.getProdutoById(Produto.class, Long.toString(id));
+        return (Produto) this.serverce.getProdutoById(Produto.class, Long.toString(id));
     }
 
     @Override
     public void preencherListaDeProdutos() {
-        new PreListaDeProdutos().listaPrePreenchida.forEach((produto) -> {
+        ListaDeProdutosPreCadastrados listaPrePreenchida = new ListaDeProdutosPreCadastrados();
+        listaPrePreenchida.getListaDeProdutos().forEach((produto) -> {
             addProduto(produto);
         });
     }
 
     @Override
     public ArrayList<Produto> getAllProdutos() {
-        return (ArrayList<Produto>)this.serverce.getAllProdutos(ArrayList.class);
+        return (ArrayList<Produto>) this.serverce.getAllProdutos(ArrayList.class);
     }
 
     static class SistemaLeilaoPort_JerseyClient {
@@ -112,16 +112,8 @@ public class WebServiceHelperImpl implements IWebServiceHelper{
         public void close() {
             client.close();
         }
+        
+        
     }
-    private class PreListaDeProdutos{
-        public ArrayList<Produto> listaPrePreenchida = new ArrayList<Produto>(){{ 
-            add(new Produto("Teste 1", "Descrição 1", 0.1, true));
-            add(new Produto("Teste 2", "Descrição 2", 0.2, true));
-            add(new Produto("Teste 3", "Descrição 3", 0.3, true));
-            add(new Produto("Teste 4", "Descrição 4", 0.4, true));
-            add(new Produto("Teste 5", "Descrição 5", 0.5, true));
-            add(new Produto("Teste 6", "Descrição 6", 0.6, true));
-            add(new Produto("Teste 7", "Descrição 7", 0.7, true));
-        }};
-    }
+
 }
