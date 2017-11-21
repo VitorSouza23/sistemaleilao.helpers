@@ -5,6 +5,9 @@
  */
 package helpers.webservice;
 
+
+import helpers.xmlcontroller.IXMLController;
+import helpers.xmlcontroller.XMLController;
 import java.util.ArrayList;
 import javax.ws.rs.ClientErrorException;
 import javax.ws.rs.client.Client;
@@ -19,10 +22,12 @@ public class WebServiceHelperImpl implements IWebServiceHelper{
     private static long _idCounter = 0;
     private static WebServiceHelperImpl _INSTANCE;
     private final SistemaLeilaoPort_JerseyClient serverce;
+    private final IXMLController<Produto> xmlController;
 
     private WebServiceHelperImpl() {
         _idCounter = 0;
         this.serverce = new SistemaLeilaoPort_JerseyClient();
+        this.xmlController = new XMLController<>();
     }
     
     public static WebServiceHelperImpl getInstance(){
@@ -36,17 +41,17 @@ public class WebServiceHelperImpl implements IWebServiceHelper{
     @Override
     public void addProduto(Produto produto) {
         produto.setId(_idCounter++);
-        this.serverce.postAddProduto(produto);
+        this.serverce.postAddProduto(this.xmlController.toXML(produto));
     }
 
     @Override
     public void removeProduto(Produto produto) {
-        this.serverce.postRemoveProduto(produto);
+        this.serverce.postRemoveProduto(this.xmlController.toXML(produto));
     }
 
     @Override
     public void upadateProduto(Produto produto) {
-         this.serverce.postUpdateProduto(produto);
+         this.serverce.postUpdateProduto(this.xmlController.toXML(produto));
     }
 
     @Override
