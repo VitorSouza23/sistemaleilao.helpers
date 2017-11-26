@@ -45,4 +45,14 @@ public class GeradorId {
         return _listaId;
     }
     
+    public boolean deleteID(long id){
+        for(Long aux : this._listaId){
+            if(aux == id){
+                this._listaId.remove(aux);
+                return true;
+            }
+        }
+        return false;
+    }
+    
 }

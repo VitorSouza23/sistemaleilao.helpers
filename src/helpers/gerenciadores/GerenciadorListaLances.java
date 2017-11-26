@@ -5,9 +5,11 @@
  */
 package helpers.gerenciadores;
 
+import java.awt.geom.Arc2D;
 import java.util.ArrayList;
 import java.util.List;
 import lance.Lance;
+import produto.Produto;
 
 /**
  *
@@ -84,4 +86,21 @@ public class GerenciadorListaLances implements IGerenciador<Lance>{
         return this._listaLancesa.get(index).getId();
     }
     
+    public List<Lance> filtrarLancesPorProduto(Produto produto){
+        List<Lance> listAux = new ArrayList<>();
+        this._listaLancesa.stream().filter((lance) -> (lance.getProduto().getId() == produto.getId())).forEachOrdered((lance) -> {
+            listAux.add(lance);
+        });
+        return listAux;
+    }
+    
+    public Lance getLanceMaisAltoProduto(Produto produto){
+        Lance lanceMaisAlto = new Lance();
+        for(Lance lance : this._listaLancesa){
+            if(lance.getValor() > lanceMaisAlto.getValor()){
+                lanceMaisAlto = lance;
+            }
+        }
+        return lanceMaisAlto;
+    }
 }
