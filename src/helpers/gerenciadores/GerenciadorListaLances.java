@@ -95,10 +95,12 @@ public class GerenciadorListaLances implements IGerenciador<Lance>{
     }
     
     public Lance getLanceMaisAltoProduto(Produto produto){
-        Lance lanceMaisAlto = new Lance();
+        Lance lanceMaisAlto = null;
+        double valorMaisAlto = 0.0;
         for(Lance lance : this._listaLancesa){
-            if(lance.getValor() > lanceMaisAlto.getValor()){
+            if(lance.getValor() > valorMaisAlto){
                 lanceMaisAlto = lance;
+                valorMaisAlto = lance.getValor();
             }
         }
         return lanceMaisAlto;
